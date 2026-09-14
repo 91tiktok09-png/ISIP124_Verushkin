@@ -269,4 +269,76 @@ namespace ExpenseTracker
             Console.WriteLine("Список отсортирован.");
             PrintData();
         }
+        static void ConvertCurrency()
+        {
+            if (expenses.Count == 0)
+            {
+                Console.WriteLine("Список трат пуст.");
+                return;
+            }
 
+            Dictionary<string, double> rates = new Dictionary<string, double>();
+            rates.Add("USD", 82.0);
+            rates.Add("EUR", 95.0);
+            rates.Add("CNY", 11.4);
+
+            Console.WriteLine("");
+            Console.WriteLine("Выберите способ конвертации:");
+            Console.WriteLine("1. Выбрать валюту из списка (USD, EUR, CNY)");
+            Console.WriteLine("2. Ввести курс вручную");
+            Console.Write("Ваш выбор: ");
+            string choice = Console.ReadLine();
+
+            double rate;
+            string currencyName;
+
+            if (choice == "1")
+            {
+                Console.WriteLine("Доступные валюты: USD, EUR, CNY");
+                Console.Write("Введите код валюты: ");
+                string codeInput = Console.ReadLine();
+                string code = codeInput == null ? "" : codeInput.Trim().ToUpper();
+
+                if (!rates.ContainsKey(code))
+                {
+                    Console.WriteLine("Неизвестная валюта.");
+                    return;
+                }
+
+                rate = rates[code];
+                currencyName = code;
+            }
+            else if (choice == "2")
+            {
+                Console.Write("Введите курс (сколько рублей за 1 единицу валюты): ");
+                string rateInput = Console.ReadLine();
+
+                bool parsed = double.TryParse(rateInput, NumberStyles.Any, CultureInfo.InvariantCulture, out rate);
+                if (!parsed)
+                {
+                    parsed = double.TryParse(rateInput, NumberStyles.Any, CultureInfo.CurrentCulture, out rate);
+                }
+
+                if (!parsed || rate <= 0)
+                {
+                    Console.WriteLine("Некорректный курс.");
+                    return;
+                }
+                currencyName = "выбранной валюте";
+            }
+            else
+            {
+                Console.WriteLine("Неверный выбор.");
+                return;
+            }
+
+            Console.WriteLine("");
+            Console.WriteLine("Траты в " + currencyName + ":");
+            for (int i = 0; i < expenses.Count; i++)
+            {
+                double converted = expenses[i].Amount / rate;
+                Console.WriteLine(expenses[i].Name + " - " + converted.ToString("F2") + " " + currencyName);
+            }
+        }
+    }
+}
