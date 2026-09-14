@@ -124,3 +124,67 @@ namespace ExpenseTracker
                 Console.WriteLine("Некорректное значение. Введите целое число от 2 до 40.");
             }
         }
+
+        static void ReadExpenses(int count)
+        {
+            Console.WriteLine("Введите траты в формате: Название услуги или товара; Количество денег");
+            Console.WriteLine("Пример: Влажные салфетки \"Лента\"; 235");
+
+            for (int i = 0; i < count; i++)
+            {
+                while (true)
+                {
+                    Console.Write("Трата " + (i + 1) + ": ");
+                    string line = Console.ReadLine();
+
+                    if (string.IsNullOrWhiteSpace(line))
+                    {
+                        Console.WriteLine("Строка не может быть пустой. Повторите ввод.");
+                        continue;
+                    }
+
+                    line = line.Trim().TrimStart('(').TrimEnd(')');
+
+                    int sepIndex = line.LastIndexOf(';');
+                    if (sepIndex == -1)
+                    {
+                        Console.WriteLine("Неверный формат. Используйте разделитель ';' между названием и суммой.");
+                        continue;
+                    }
+
+                    string name = line.Substring(0, sepIndex).Trim();
+                    string amountStr = line.Substring(sepIndex + 1).Trim();
+
+                    if (string.IsNullOrWhiteSpace(name))
+                    {
+                        Console.WriteLine("Название не может быть пустым.");
+                        continue;
+                    }
+
+                    double amount;
+                    bool parsed = double.TryParse(amountStr, NumberStyles.Any, CultureInfo.InvariantCulture, out amount);
+                    if (!parsed)
+                    {
+                        parsed = double.TryParse(amountStr, NumberStyles.Any, CultureInfo.CurrentCulture, out amount);
+                    }
+
+                    if (!parsed)
+                    {
+                        Console.WriteLine("Сумма указана неверно. Введите число.");
+                        continue;
+                    }
+
+                    if (amount < 0)
+                    {
+                        Console.WriteLine("Сумма не может быть отрицательной.");
+                        continue;
+                    }
+
+                    expenses.Add(new Expense(name, amount));
+                    break;
+                }
+            }
+
+            Console.WriteLine("Все траты успешно внесены.");
+            Console.WriteLine("");
+        }
