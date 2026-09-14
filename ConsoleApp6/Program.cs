@@ -188,3 +188,16 @@ namespace ExpenseTracker
             Console.WriteLine("Все траты успешно внесены.");
             Console.WriteLine("");
         }
+        static void ShowMenu()
+        {
+            Console.WriteLine("");
+            Console.WriteLine("Меню:");
+            Console.WriteLine("1. Вывод данных");
+            Console.WriteLine("2. Статистика (среднее, максимальное, минимальное, сумма)");
+            Console.WriteLine("3. Сортировка по цене (пузырьковая сортировка)");
+            Console.WriteLine("4. Конвертация валюты");
+            Console.WriteLine("5. Поиск по названию");
+            Console.WriteLine("0. Выход");
+            Console.Write("Выберите пункт меню: ");
+        }
+
