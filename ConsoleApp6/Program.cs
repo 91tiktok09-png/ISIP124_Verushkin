@@ -200,4 +200,33 @@ namespace ExpenseTracker
             Console.WriteLine("0. Выход");
             Console.Write("Выберите пункт меню: ");
         }
+        static void PrintData()
+        {
+            Console.WriteLine("");
+            Console.WriteLine("Список трат:");
+            for (int i = 0; i < expenses.Count; i++)
+            {
+                Console.WriteLine((i + 1) + ". " + expenses[i].Name + " - " + expenses[i].Amount.ToString("F2") + " руб.");
+            }
+        }
 
+        static void ShowStatistics()
+        {
+            if (expenses.Count == 0)
+            {
+                Console.WriteLine("Список трат пуст.");
+                return;
+            }
+
+            double sum = expenses.Sum(e => e.Amount);
+            double avg = sum / expenses.Count;
+            double max = expenses.Max(e => e.Amount);
+            double min = expenses.Min(e => e.Amount);
+
+            Console.WriteLine("");
+            Console.WriteLine("Статистика:");
+            Console.WriteLine("Сумма: " + sum.ToString("F2") + " руб.");
+            Console.WriteLine("Среднее: " + avg.ToString("F2") + " руб.");
+            Console.WriteLine("Максимум: " + max.ToString("F2") + " руб.");
+            Console.WriteLine("Минимум: " + min.ToString("F2") + " руб.");
+        }
