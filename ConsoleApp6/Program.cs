@@ -69,3 +69,44 @@ namespace ExpenseTracker
                 }
             }
         }
+        static void SearchByName()
+        {
+            if (expenses.Count == 0)
+            {
+                Console.WriteLine("Список трат пуст.");
+                return;
+            }
+
+            Console.Write("\nВведите название или часть названия для поиска: ");
+            string input = Console.ReadLine();
+
+            if (string.IsNullOrWhiteSpace(input))
+            {
+                Console.WriteLine("Пустой запрос.");
+                return;
+            }
+
+            string query = input.Trim().ToLower();
+            bool found = false;
+
+            for (int i = 0; i < expenses.Count; i++)
+            {
+                string nameLower = expenses[i].Name.ToLower();
+
+                if (nameLower.Contains(query))
+                {
+                    if (!found)
+                    {
+                        Console.WriteLine("--- Результаты поиска ---");
+                        found = true;
+                    }
+                    Console.WriteLine((i + 1) + ". " + expenses[i].Name
+                                      + " — " + expenses[i].Amount.ToString("F2") + " руб.");
+                }
+            }
+
+            if (!found)
+            {
+                Console.WriteLine("Ничего не найдено.");
+            }
+        }
