@@ -230,3 +230,43 @@ namespace ExpenseTracker
             Console.WriteLine("Максимум: " + max.ToString("F2") + " руб.");
             Console.WriteLine("Минимум: " + min.ToString("F2") + " руб.");
         }
+        static void BubbleSortByPrice()
+        {
+            if (expenses.Count == 0)
+            {
+                Console.WriteLine("Список трат пуст.");
+                return;
+            }
+
+            Console.Write("Сортировать по возрастанию (1) или убыванию (2)? ");
+            string dirChoice = Console.ReadLine();
+            bool ascending = dirChoice != "2";
+
+            int n = expenses.Count;
+            for (int i = 0; i < n - 1; i++)
+            {
+                for (int j = 0; j < n - i - 1; j++)
+                {
+                    bool needSwap;
+                    if (ascending)
+                    {
+                        needSwap = expenses[j].Amount > expenses[j + 1].Amount;
+                    }
+                    else
+                    {
+                        needSwap = expenses[j].Amount < expenses[j + 1].Amount;
+                    }
+
+                    if (needSwap)
+                    {
+                        Expense temp = expenses[j];
+                        expenses[j] = expenses[j + 1];
+                        expenses[j + 1] = temp;
+                    }
+                }
+            }
+
+            Console.WriteLine("Список отсортирован.");
+            PrintData();
+        }
+
