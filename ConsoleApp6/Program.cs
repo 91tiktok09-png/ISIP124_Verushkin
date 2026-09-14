@@ -110,3 +110,17 @@ namespace ExpenseTracker
                 Console.WriteLine("Ничего не найдено.");
             }
         }
+        static int ReadOperationsCount()
+        {
+            int count;
+            while (true)
+            {
+                Console.Write("Введите количество операций (от 2 до 40): ");
+                string input = Console.ReadLine();
+                if (int.TryParse(input, out count) && count >= 2 && count <= 40)
+                {
+                    return count;
+                }
+                Console.WriteLine("Некорректное значение. Введите целое число от 2 до 40.");
+            }
+        }
