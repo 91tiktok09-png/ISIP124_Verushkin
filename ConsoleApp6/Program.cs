@@ -265,3 +265,56 @@ namespace StoreInventory
             salesHistory.Push(sale);
             Console.WriteLine($"Продано {amount} шт. \"{product.Name}\" на сумму {total:0.00}.");
         }
+        static void SearchProducts()
+        {
+            Console.WriteLine("--- Поиск товара ---");
+            Console.WriteLine("1. По коду");
+            Console.WriteLine("2. По названию");
+            Console.WriteLine("3. По категории");
+            Console.Write("Выберите способ поиска: ");
+            string choice = Console.ReadLine();
+
+            List<Product> results = new List<Product>();
+
+            switch (choice)
+            {
+                case "1":
+                    int code = ReadNonNegativeInt("Введите код товара: ");
+                    results = products.Where(p => p.Code == code).ToList();
+                    break;
+                case "2":
+                    string name = ReadNonEmptyString("Введите название (или часть названия): ");
+                    results = products.Where(p => p.Name.IndexOf(name, StringComparison.OrdinalIgnoreCase) >= 0).ToList();
+                    break;
+                case "3":
+                    Category category = ReadCategory();
+                    results = products.Where(p => p.Category == category).ToList();
+                    break;
+                default:
+                    Console.WriteLine("Некорректный выбор способа поиска.");
+                    return;
+            }
+
+            if (results.Count == 0)
+            {
+                Console.WriteLine("Товары не найдены.");
+            }
+            else
+            {
+                Console.WriteLine("Найденные товары:");
+                foreach (var p in results)
+                    Console.WriteLine(p);
+            }
+        }
+
+        static void ShowAllProducts()
+        {
+            Console.WriteLine("--- Список всех товаров ---");
+            if (products.Count == 0)
+            {
+                Console.WriteLine("Список товаров пуст.");
+                return;
+            }
+            foreach (var p in products.OrderBy(p => p.Code))
+                Console.WriteLine(p);
+        }
