@@ -185,3 +185,51 @@ namespace StoreInventory
                 Console.WriteLine("Некорректный номер категории. Повторите ввод.");
             }
         }
+        static void AddProduct()
+        {
+            Console.WriteLine("--- Добавление товара ---");
+            string name = ReadNonEmptyString("Название товара: ");
+            decimal price = ReadNonNegativeDecimal("Цена товара: ");
+            int quantity = ReadNonNegativeInt("Количество товара: ");
+            Category category = ReadCategory();
+
+            var product = new Product
+            {
+                Code = nextCode++,
+                Name = name,
+                Price = price,
+                Quantity = quantity,
+                Category = category
+            };
+            products.Add(product);
+            Console.WriteLine($"Товар добавлен с кодом {product.Code}.");
+        }
+
+        static void DeleteProduct()
+        {
+            Console.WriteLine("--- Удаление товара ---");
+            int code = ReadNonNegativeInt("Введите код товара для удаления: ");
+            var product = products.FirstOrDefault(p => p.Code == code);
+            if (product == null)
+            {
+                Console.WriteLine("Товар с таким кодом не найден.");
+                return;
+            }
+            products.Remove(product);
+            Console.WriteLine($"Товар \"{product.Name}\" удалён.");
+        }
+
+        static void OrderSupply()
+        {
+            Console.WriteLine("--- Заказ поставки товара ---");
+            int code = ReadNonNegativeInt("Введите код товара: ");
+            var product = products.FirstOrDefault(p => p.Code == code);
+            if (product == null)
+            {
+                Console.WriteLine("Товар с таким кодом не найден.");
+                return;
+            }
+            int amount = ReadNonNegativeInt("Количество для поставки: ");
+            product.Quantity += amount;
+            Console.WriteLine($"Поставка выполнена. Новое количество \"{product.Name}\": {product.Quantity}.");
+        }
