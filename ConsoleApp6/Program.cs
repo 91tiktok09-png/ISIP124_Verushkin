@@ -131,3 +131,57 @@ namespace StoreInventory
             products.Add(new Product { Code = nextCode++, Name = "Стиральный порошок", Price = 350.00m, Quantity = 0, Category = Category.БытоваяХимия });
             products.Add(new Product { Code = nextCode++, Name = "Молоко 1л", Price = 89.90m, Quantity = 15, Category = Category.Продукты });
         }
+        static string ReadNonEmptyString(string prompt)
+        {
+            string input;
+            do
+            {
+                Console.Write(prompt);
+                input = Console.ReadLine();
+                if (string.IsNullOrWhiteSpace(input))
+                    Console.WriteLine("Значение не может быть пустым. Повторите ввод.");
+            } while (string.IsNullOrWhiteSpace(input));
+            return input.Trim();
+        }
+
+        static decimal ReadNonNegativeDecimal(string prompt)
+        {
+            decimal value;
+            while (true)
+            {
+                Console.Write(prompt);
+                string input = Console.ReadLine();
+                if (decimal.TryParse(input, out value) && value >= 0)
+                    return value;
+                Console.WriteLine("Некорректное значение. Введите число, большее или равное нулю.");
+            }
+        }
+
+        static int ReadNonNegativeInt(string prompt)
+        {
+            int value;
+            while (true)
+            {
+                Console.Write(prompt);
+                string input = Console.ReadLine();
+                if (int.TryParse(input, out value) && value >= 0)
+                    return value;
+                Console.WriteLine("Некорректное значение. Введите целое число, большее или равное нулю.");
+            }
+        }
+
+        static Category ReadCategory()
+        {
+            var categories = Enum.GetValues(typeof(Category)).Cast<Category>().ToList();
+            while (true)
+            {
+                Console.WriteLine("Выберите категорию:");
+                for (int i = 0; i < categories.Count; i++)
+                    Console.WriteLine($"{i + 1}. {categories[i]}");
+                Console.Write("Номер категории: ");
+                string input = Console.ReadLine();
+                if (int.TryParse(input, out int index) && index >= 1 && index <= categories.Count)
+                    return categories[index - 1];
+                Console.WriteLine("Некорректный номер категории. Повторите ввод.");
+            }
+        }
