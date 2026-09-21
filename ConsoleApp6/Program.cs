@@ -318,3 +318,37 @@ namespace StoreInventory
             foreach (var p in products.OrderBy(p => p.Code))
                 Console.WriteLine(p);
         }
+        static void UndoLastSale()
+        {
+            Console.WriteLine("--- Отмена последней продажи ---");
+            if (salesHistory.Count == 0)
+            {
+                Console.WriteLine("История продаж пуста. Отменять нечего.");
+                return;
+            }
+            var lastSale = salesHistory.Pop();
+            lastSale.Product.Quantity += lastSale.Quantity;
+            Console.WriteLine($"Продажа отменена: {lastSale.Quantity} шт. \"{lastSale.Product.Name}\" возвращены на склад.");
+        }
+
+        static void ShowSalesReport()
+        {
+            Console.WriteLine("--- Отчёт о продажах ---");
+            if (salesHistory.Count == 0)
+            {
+                Console.WriteLine("Продаж пока не было.");
+                return;
+            }
+            decimal grandTotal = 0;
+            int totalItems = 0;
+            foreach (var sale in salesHistory.Reverse())
+            {
+                Console.WriteLine(sale);
+                grandTotal += sale.TotalPrice;
+                totalItems += sale.Quantity;
+            }
+            Console.WriteLine($"\nВсего продано единиц товара: {totalItems}");
+            Console.WriteLine($"Общая сумма продаж: {grandTotal:0.00}");
+        }
+    }
+}
