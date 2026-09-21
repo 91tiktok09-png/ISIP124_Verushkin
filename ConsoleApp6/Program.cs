@@ -233,3 +233,35 @@ namespace StoreInventory
             product.Quantity += amount;
             Console.WriteLine($"Поставка выполнена. Новое количество \"{product.Name}\": {product.Quantity}.");
         }
+        static void SellProduct()
+        {
+            Console.WriteLine("--- Продажа товара ---");
+            int code = ReadNonNegativeInt("Введите код товара: ");
+            var product = products.FirstOrDefault(p => p.Code == code);
+            if (product == null)
+            {
+                Console.WriteLine("Товар с таким кодом не найден.");
+                return;
+            }
+            if (!product.InStock)
+            {
+                Console.WriteLine($"Товара \"{product.Name}\" нет на складе.");
+                return;
+            }
+            int amount = ReadNonNegativeInt("Количество для продажи: ");
+            if (amount == 0)
+            {
+                Console.WriteLine("Количество продажи должно быть больше нуля.");
+                return;
+            }
+            if (amount > product.Quantity)
+            {
+                Console.WriteLine($"Недостаточно товара на складе. Доступно: {product.Quantity}.");
+                return;
+            }
+            product.Quantity -= amount;
+            decimal total = product.Price * amount;
+            var sale = new Sale { Product = product, Quantity = amount, TotalPrice = total, Date = DateTime.Now };
+            salesHistory.Push(sale);
+            Console.WriteLine($"Продано {amount} шт. \"{product.Name}\" на сумму {total:0.00}.");
+        }
